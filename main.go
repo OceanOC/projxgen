@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 
@@ -10,12 +9,30 @@ import (
 )
 
 func main() {
+	fv := FlagVars{}
+	var compiler, linkerflags, langflags string
+
 	cmd := &cli.Command{
 		Name:  "projxgen",
 		Usage: "Simply make a project template",
-		Action: func(context.Context, *cli.Command) error {
-			fmt.Println("boom! I say!")
-			return nil
+		Commands: []*cli.Command{
+			{
+				Name:    "new",
+				Aliases: []string{"n"},
+				Usage:   "Make a new project",
+				Commands: []*cli.Command{
+					{
+						Name:     "C-GNUMake-Minimal",
+						Category: "C",
+						Aliases:  []string{"c", "c-make-min"},
+						Flags:    cFlags(&fv),
+						Action: func(ctx context.Context, cmd *cli.Command) error {
+							cGCCMakeMini(cmd.Args().Get(0), langflags, linkerflags, compiler)
+							return nil
+						},
+					},
+				},
+			},
 		},
 	}
 
