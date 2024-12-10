@@ -13,7 +13,7 @@ import (
 //go:embed templates/Makefile-C
 var mfc string
 
-func cGCCMakeMini(name, cflags, ldflags, cc string) {
+func cMakeMini(name, cflags, ldflags, cc string) {
 	namec := filepath.Clean(name)
 	os.MkdirAll(filepath.Join(namec, "src"), 0700)
 	os.MkdirAll(filepath.Join(namec, "build"), 0700)
@@ -25,7 +25,7 @@ func cGCCMakeMini(name, cflags, ldflags, cc string) {
 
 	var mfs string
 	body, err := http.Get("https://raw.githubusercontent.com/OceanOC/projxgen/refs/heads/main/templates/Makefile-C")
-	if err != nil {
+	if err != nil || body.StatusCode != http.StatusOK {
 		// Incase of any errors use embedded Makefile-C
 		mfs = mfc
 	} else {

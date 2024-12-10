@@ -27,7 +27,7 @@ func main() {
 						Aliases:  []string{"c", "c-make-min"},
 						Flags:    cFlags(&fv),
 						Action: func(ctx context.Context, cmd *cli.Command) error {
-							cGCCMakeMini(cmd.Args().Get(0), langflags, linkerflags, compiler)
+							cMakeMini(cmd.Args().Get(0), langflags, linkerflags, compiler)
 							return nil
 						},
 					},
