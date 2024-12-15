@@ -8,19 +8,31 @@ import (
 	"strings"
 )
 
-func cMakeMini(name, cflags, ldflags, cc string) {
+func cMini(name string) error {
 	namec := filepath.Clean(name)
 	os.MkdirAll(filepath.Join(namec, "src"), 0700)
 	os.MkdirAll(filepath.Join(namec, "build"), 0700)
 
-	mf, err := os.Create(filepath.Join(namec, "Makefile"))
-	if err != nil {
-		fmt.Println("Could not create Makefile", err.Error())
-	}
-
 	cf, err := os.Create(filepath.Join(namec, "src", "main.c"))
 	if err != nil {
 		fmt.Println("Could not create main.c", err.Error())
+		return err
+	}
+	mcs := getTemplate(C_Mini)
+	mcs = strings.ReplaceAll(mcs, ".$PROJNAME", name)
+	cf.WriteString(mcs)
+
+	return nil
+}
+
+func cMakeMini(name, cflags, ldflags, cc string) error {
+	namec := filepath.Clean(name)
+	cMini(namec)
+
+	mf, err := os.Create(filepath.Join(namec, "Makefile"))
+	if err != nil {
+		fmt.Println("Could not create Makefile", err.Error())
+		return err
 	}
 
 	mfs := getTemplate(Makefile_C)
@@ -30,7 +42,5 @@ func cMakeMini(name, cflags, ldflags, cc string) {
 	mfs = strings.ReplaceAll(mfs, ".$CC", cc)
 	mf.WriteString(mfs)
 
-	mcs := getTemplate(C_Mini)
-	mcs = strings.ReplaceAll(mcs, ".$PROJNAME", name)
-	cf.WriteString(mcs)
+	return nil
 }
