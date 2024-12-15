@@ -36,7 +36,6 @@ func main() {
 						Description: "A minimal C project with no build system",
 						Category:    "C",
 						Aliases:     []string{"c-min"},
-						Flags:       cFlags(&fv),
 						Action: func(ctx context.Context, cmd *cli.Command) error {
 							return cMini(cmd.Args().Get(0))
 						},
