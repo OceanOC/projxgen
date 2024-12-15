@@ -28,7 +28,7 @@ func main() {
 						Aliases:  []string{"c", "c-make-min"},
 						Flags:    cFlags(&fv),
 						Action: func(ctx context.Context, cmd *cli.Command) error {
-							return cMakeMini(cmd.Args().Get(0), strings.Join(fv.cflags, " --")+" --cstd="+fv.cver, strings.Join(fv.ldflags, " "), fv.compiler)
+							return cMakeMini(cmd.Args().Get(0), strings.Join(fv.cflags, " --")+" --std="+fv.cver, strings.Join(fv.ldflags, " "), fv.compiler)
 						},
 					},
 					{
